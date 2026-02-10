@@ -1,15 +1,13 @@
+/* Global Styles */
 :root {
   --primary-color: #003366;
-  --secondary-color: #00509d;
   --accent-color: #fca311;
-  --bg-light: #f4f7f6;
-  --text-dark: #333333;
-  --text-light: #666666;
+  --bg-light: #f4f4f9;
+  --text-dark: #333;
+  --text-light: #777;
   --success: #28a745;
-  --warning: #ffc107;
   --danger: #dc3545;
-  --border-radius: 8px;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --warning: #ffc107;
 }
 
 * {
@@ -19,9 +17,10 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-light);
   color: var(--text-dark);
+  line-height: 1.6;
 }
 
 .container {
@@ -30,49 +29,77 @@ body {
   padding: 0 20px;
 }
 
-/* Auth Pages */
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.auth-card {
-  background: white;
-  padding: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 400px;
-}
-
-h1, h2, h3 {
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-input, select, textarea {
+/* Dashboard Layout */
+.dashboard-layout {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+
+.sidebar {
+  width: 280px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 30px 20px;
+}
+
+.sidebar h3 {
+  color: white;
+  margin-bottom: 25px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Cards & Forms */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+input,
+select,
+textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-button {
-  padding: 12px 24px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: opacity 0.2s;
+  font-size: 1rem;
 }
 
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
   width: 100%;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
 }
 
 .btn-primary:disabled {
@@ -80,42 +107,73 @@ button {
   cursor: not-allowed;
 }
 
-/* Dashboards */
-.dashboard-layout {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  min-height: 100vh;
-}
-
-.sidebar {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 30px 20px;
-}
-
-.main-content {
-  padding: 40px;
-}
-
-.card {
-  background: white;
-  padding: 24px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  margin-bottom: 20px;
-}
-
+/* Status Badges */
 .status-badge {
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.status-submitted { background: #e3f2fd; color: #1976d2; }
-.status-progress { background: #fff3e0; color: #f57c00; }
-.status-resolved { background: #e8f5e9; color: #388e3c; }
-.status-rejected { background: #ffebee; color: #d32f2f; }
+.status-submitted {
+  background: #e3f2fd;
+  color: #1976d2;
+}
 
-.priority-high { color: var(--danger); font-weight: bold; }
-.priority-urgent { background: var(--danger); color: white; padding: 2px 6px; border-radius: 4px; }
+.status-progress {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.status-resolved {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-rejected {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* Priority Colors */
+.priority-urgent {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.priority-high {
+  color: #f57c00;
+  font-weight: bold;
+}
+
+.priority-medium {
+  color: #fbc02d;
+  font-weight: bold;
+}
+
+.priority-low {
+  color: var(--success);
+  font-weight: bold;
+}
+
+/* Auth Pages */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.text-light {
+  color: var(--text-light);
+}

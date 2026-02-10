@@ -16,10 +16,19 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
             if (user) {
-                const userRef = doc(db, 'users', user.uid);
-                const userSnap = await getDoc(userRef);
+                // Try fetching from users (Citizens)
+                let userRef = doc(db, 'users', user.uid);
+                let userSnap = await getDoc(userRef);
+
                 if (userSnap.exists()) {
-                    setUserData(userSnap.data());
+                    setUserData({ ...userSnap.data(), id: user.uid });
+                } else {
+                    // Try fetching from departments
+                    userRef = doc(db, 'departments', user.uid);
+                    userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        setUserData({ ...userSnap.data(), id: user.uid, role: 'department' });
+                    }
                 }
             } else {
                 setUserData(null);

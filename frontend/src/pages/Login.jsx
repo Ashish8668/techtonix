@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
-    const [loginType, setLoginType] = useState('user'); // 'user' or 'department'
+    const [loginType, setLoginType] = useState('user'); // 'user' (Citizen) or 'department'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,24 +18,27 @@ const Login = () => {
         setError('');
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            // Check role and redirect
-            const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+
+            // Determine which collection to check
+            const collectionName = loginType === 'user' ? 'users' : 'departments';
+            const userDoc = await getDoc(doc(db, collectionName, userCredential.user.uid));
+
             if (userDoc.exists()) {
-                const role = userDoc.data().role;
-
-                // Verify if they are logging into the right section
-                if (role !== loginType) {
-                    setError(`This account is not registered as a ${loginType === 'user' ? 'Citizen' : 'Department'}.`);
-                    setLoading(false);
-                    return;
-                }
-
-                if (role === 'user') navigate('/dashboard');
-                else if (role === 'department') navigate('/dept-dashboard');
-                else if (role === 'admin') navigate('/admin-dashboard');
+                if (loginType === 'user') navigate('/dashboard');
+                else navigate('/dept-dashboard');
+            } else {
+                setError(`Account verified but not found in ${loginType === 'user' ? 'Citizens' : 'Departments'} collection. Please ensure you registered in the correct category.`);
+                await auth.signOut();
             }
         } catch (err) {
-            setError(err.message);
+            console.error("Login Error Details:", err.code, err.message);
+            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                setError("Invalid email or password. Please check your credentials.");
+            } else if (err.code === 'auth/invalid-api-key') {
+                setError("Firebase API Key is invalid. Check your .env file.");
+            } else {
+                setError("Login failed. Check your internet or Firebase console (Auth must be enabled).");
+            }
         }
         setLoading(false);
     };
@@ -94,7 +97,7 @@ const Login = () => {
                     </button>
                 </form>
                 <p style={{ marginTop: '20px', textAlign: 'center' }}>
-                    New {loginType === 'user' ? 'citizen' : 'department'}? <Link to="/register">Register here</Link>
+                    Don't have an account? <Link to="/register">Register here</Link>
                 </p>
             </div>
         </div>

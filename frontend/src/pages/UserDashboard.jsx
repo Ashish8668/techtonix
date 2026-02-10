@@ -13,12 +13,13 @@ const UserDashboard = () => {
         const fetchReports = async () => {
             const q = query(
                 collection(db, 'reports'),
-                where('user_id', '==', currentUser.uid),
-                orderBy('created_at', 'desc')
+                where('user_id', '==', currentUser.uid)
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setReports(data);
+            // Sort in memory to avoid index error
+            const sortedData = data.sort((a, b) => b.created_at?.toMillis() - a.created_at?.toMillis());
+            setReports(sortedData);
         };
         fetchReports();
     }, [currentUser.uid]);

@@ -1,30 +1,32 @@
 [
     {
-        "name": "Sanitation Department",
+        "name": "Central Sanitation Dept",
         "category": "Sanitation",
         "city": "Mumbai",
-        "contact_email": "sanitation@mumbai.gov.in",
-        "sla_days": 3
+        "contact_email": "sanitation@mumbai.gov.in"
     },
     {
-        "name": "Roads & Maintenance",
-        "category": "Roads",
+        "name": "Parivahan Vibhag",
+        "category": "Parivahan",
         "city": "Mumbai",
-        "contact_email": "roads@mumbai.gov.in",
-        "sla_days": 5
+        "contact_email": "vibhag@parivahan.gov.in"
     },
     {
-        "name": "Water Supply Board",
-        "category": "Water",
+        "name": "Ladki Bahin Yojana Cell",
+        "category": "Ladki Bahin",
         "city": "Mumbai",
-        "contact_email": "water@mumbai.gov.in",
-        "sla_days": 2
+        "contact_email": "support@ladkibahin.gov.in"
     },
     {
-        "name": "Electricity Board",
-        "category": "Electricity",
+        "name": "Niradhar Yojana Division",
+        "category": "Niradhar",
         "city": "Mumbai",
-        "contact_email": "power@mumbai.gov.in",
-        "sla_days": 1
+        "contact_email": "niradhar@gov.in"
+    },
+    {
+        "name": "PM Kisan Helpline",
+        "category": "PM Kisan",
+        "city": "Mumbai",
+        "contact_email": "pmkisan@central.gov.in"
     }
 ]

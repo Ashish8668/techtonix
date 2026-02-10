@@ -15,32 +15,29 @@ CORS(app)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
-MODEL_NAME = "gemini-1.5-flash" # Stable version (User mentioned 2.5, but 1.5/2.0 are current)
+MODEL_NAME = "gemini-1.5-flash" 
+
+# SPECIFIC CATEGORIES FOR HACKATHON
+HACKATHON_CATEGORIES = ["Sanitation", "Parivahan", "Ladki Bahin", "Niradhar", "PM Kisan"]
 
 PROMPT_TEMPLATE = """
-As a government NLP assistant, analyze the following citizen complaint and return ONLY a valid JSON object.
-Do not include any greeting or explanation.
+As a government AI assistant, analyze the citizen complaint and return ONLY a valid JSON object.
 
 Complaint: {text}
 
-JSON Format:
+JSON Schema:
 {{
-  "category": "String (e.g., Sanitation, Roads, Water, Electricity, Public Safety)",
-  "priority": "String (Low, Medium, High, Urgent)",
-  "sentiment": "String (Positive, Neutral, Negative)",
-  "summary": "String (Max 25 words)",
-  "recommended_department": "String (Matched with category)",
-  "extracted_entities": {{
-    "location": "String or null",
-    "time_reference": "String or null",
-    "service": "String or null"
-  }}
+  "category": "Must be EXACTLY one of: {categories}",
+  "priority": "Low, Medium, High, or Urgent",
+  "summary": "Short summary (max 15 words)",
+  "location": "Extracted location or 'Unknown'",
+  "key_problem": "The main issue described"
 }}
 
 Rules:
-1. Priority 'Urgent' if there is immediate danger or public health risk.
-2. If unsure about any field, return null.
-3. Keep the tone neutral.
+1. ONLY return the JSON. No markdown, no pre-amble.
+2. If the complaint doesn't fit a category perfectly, pick the closest one.
+3. Priority 'Urgent' for safety or critical welfare issues.
 """
 
 @app.route('/analyze', methods=['POST'])
@@ -53,13 +50,16 @@ def analyze():
 
     try:
         model = genai.GenerativeModel(MODEL_NAME)
-        prompt = PROMPT_TEMPLATE.format(text=complaint_text)
+        prompt = PROMPT_TEMPLATE.format(
+            text=complaint_text, 
+            categories=", ".join(HACKATHON_CATEGORIES)
+        )
         
-        # Using generate_content for Gemini
         response = model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(
                 response_mime_type="application/json",
+                temperature=0.1
             ),
         )
 
@@ -74,7 +74,6 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    # Add a check for API key
     if not GEMINI_API_KEY:
-        print("WARNING: GEMINI_API_KEY not found in environment variables.")
+        print("WARNING: GEMINI_API_KEY missing.")
     app.run(port=5000, debug=True)
