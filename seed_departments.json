@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Sanitation Department",
+        "category": "Sanitation",
+        "city": "Mumbai",
+        "contact_email": "sanitation@mumbai.gov.in",
+        "sla_days": 3
+    },
+    {
+        "name": "Roads & Maintenance",
+        "category": "Roads",
+        "city": "Mumbai",
+        "contact_email": "roads@mumbai.gov.in",
+        "sla_days": 5
+    },
+    {
+        "name": "Water Supply Board",
+        "category": "Water",
+        "city": "Mumbai",
+        "contact_email": "water@mumbai.gov.in",
+        "sla_days": 2
+    },
+    {
+        "name": "Electricity Board",
+        "category": "Electricity",
+        "city": "Mumbai",
+        "contact_email": "power@mumbai.gov.in",
+        "sla_days": 1
+    }
+]
